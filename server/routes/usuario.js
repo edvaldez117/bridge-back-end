@@ -29,7 +29,7 @@ app.post('/usuario', (req, res) => {
         }
         res.status(201).json({
             ok: true,
-            usuarioDB
+            usuario: usuarioDB
         });
     });
 });

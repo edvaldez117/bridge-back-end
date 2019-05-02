@@ -17,6 +17,28 @@ const nombreCompletoSchema = new Schema({
     }
 }, { _id: false });
 
+const direccionSchema = new Schema({
+    codigoPostal: {
+        type: String,
+        required: [true, 'El código postal es obligatorio']
+    },
+    colonia: {
+        type: String,
+        required: [true, 'La colonia es obligatoria']
+    },
+    calle: {
+        type: String,
+        required: [true, 'La calle es obligatoria']
+    },
+    numeroExterior: {
+        type: String,
+        required: [true, 'El número exterior es obligatorio']
+    },
+    numeroInterior: {
+        type: String
+    }
+}, { _id: false });
+
 const usuarioSchema = new Schema({
     email: {
         type: String,
@@ -35,9 +57,9 @@ const usuarioSchema = new Schema({
         type: nombreCompletoSchema,
         required: [true, 'El nombre completo es obligatorio']
     },
-    codigoPostal: {
-        type: String,
-        required: [true, 'El código postal es obligatorio']
+    direccion: {
+        type: direccionSchema,
+        required: [true, 'La dirección es obligatoria']
     },
     telefono: {
         type: String,
