@@ -1,0 +1,21 @@
+{
+    "name": "bridge-back-end",
+    "version": "1.0.0",
+    "description": "Proyecto para las materias de programación de interfaces y bases de datos distribuidas de la carrera de Ingeniería en Sistemas Computacionales de la Universidad Autónoma de Aguascalientes.",
+    "main": "server.js",
+    "scripts": {
+        "start": "node server/server",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "body-parser": "^1.19.0",
+        "cors": "^2.8.5",
+        "crypto-js": "^3.1.9-1",
+        "express": "^4.16.4",
+        "jsonwebtoken": "^8.5.1",
+        "mongoose": "^5.5.4",
+        "mongoose-unique-validator": "^2.0.3"
+    }
+}
