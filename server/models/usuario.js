@@ -63,7 +63,6 @@ const usuarioSchema = new Schema({
     },
     telefono: {
         type: String,
-        unique: true,
         required: [true, 'El teléfono es obligatorio']
     },
     isAdmin: {
