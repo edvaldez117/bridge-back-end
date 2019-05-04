@@ -16,6 +16,12 @@ app.post('/usuario', (req, res) => {
     body.activo = true;
     body.isAdmin = false;
     body.imagenPerfil = 'default.jpg'
+    if (body.nombreCompleto) {
+        body.nombreCompleto.apellido2 = body.nombreCompleto.apellido2 === null ? undefined : body.nombreCompleto.apellido2;
+    }
+    if (body.direccion) {
+        body.direccion.numeroInterior = body.direccion.numeroInterior === null ? undefined : body.direccion.numeroInterior;
+    }
     if (body.contrasena) {
         body.contrasena = String(SHA256(body.contrasena));
     }
