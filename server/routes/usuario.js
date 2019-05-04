@@ -22,7 +22,7 @@ app.post('/usuario', (req, res) => {
     const usuario = new Usuario(body);
     usuario.save((err, usuarioDB) => {
         if (err) {
-            return res.status(500).json({
+            return res.status(400).json({
                 ok: false,
                 err
             });
@@ -45,6 +45,7 @@ app.put('/usuario', verificarToken, (req, res) => {
     } else {
         body.nombreCompleto.nombres = body.nombreCompleto.nombres || usuario.nombreCompleto.nombres;
         body.nombreCompleto.apellido1 = body.nombreCompleto.apellido1 || usuario.nombreCompleto.apellido1;
+        body.nombreCompleto.apellido2 = body.nombreCompleto.apellido2 === null ? undefined : body.nombreCompleto.apellido2;
     }
     if (!body.direccion) {
         body.direccion = usuario.direccion;
@@ -53,13 +54,14 @@ app.put('/usuario', verificarToken, (req, res) => {
         body.direccion.colonia = body.direccion.colonia || usuario.direccion.colonia;
         body.direccion.calle = body.direccion.calle || usuario.direccion.calle;
         body.direccion.numeroExterior = body.direccion.numeroExterior || usuario.direccion.numeroExterior;
+        body.direccion.numeroInterior = body.direccion.numeroInterior === null ? undefined : body.direccion.numeroInterior;
     }
     body.telefono = body.telefono || usuario.telefono;
     body.isAdmin = usuario.isAdmin;
     body.activo = usuario.activo;
     Usuario.findByIdAndUpdate(req.usuario._id, body, { new: true }, (err, usuarioDB) => {
         if (err) {
-            return res.status(500).json({
+            return res.status(400).json({
                 ok: false,
                 err
             });
@@ -75,6 +77,29 @@ app.put('/usuario', verificarToken, (req, res) => {
         res.json({
             ok: true,
             usuario: usuarioDB
+        });
+    });
+});
+
+app.delete('/usuario', verificarToken, (req, res) => {
+    Usuario.findByIdAndUpdate(req.usuario._id, { activo: false }, (err, usuarioDB) => {
+        if (err) {
+            return res.status(400).json({
+                ok: false,
+                err
+            });
+        }
+        if (!usuarioDB) {
+            return res.status(400).json({
+                ok: false,
+                err: {
+                    message: 'Usuario no encontrado'
+                }
+            });
+        }
+        res.json({
+            ok: true,
+            message: 'Usuario eliminado con éxito'
         });
     });
 });

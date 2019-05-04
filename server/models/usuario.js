@@ -51,7 +51,8 @@ const usuarioSchema = new Schema({
     },
     imagenPerfil: {
         type: String,
-        default: 'default.jpg'
+        default: 'default.jpg',
+        required: [true, 'La imagen de perfil es obligatoria']
     },
     nombreCompleto: {
         type: nombreCompletoSchema,
@@ -67,7 +68,8 @@ const usuarioSchema = new Schema({
     },
     isAdmin: {
         type: Boolean,
-        default: false
+        default: false,
+        required: [true, 'El campo isAdmin no puede ser nulo']
     },
     tema: {
         type: Schema.Types.ObjectId,
@@ -76,7 +78,7 @@ const usuarioSchema = new Schema({
     activo: {
         type: Boolean,
         deafult: true,
-        required: true
+        required: [true, 'El campo activo no puede ser nulo']
     }
 });
 

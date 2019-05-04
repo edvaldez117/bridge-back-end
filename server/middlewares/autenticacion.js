@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const SHA256 = require('crypto-js/sha256');
 const Usuario = require('../models/usuario');
 
-let verificarToken = (req, res, next) => {
+const verificarToken = (req, res, next) => {
     const token = req.get('Authorization');
     jwt.verify(token, process.env.SEED, (err, decoded) => {
         if (err) {
