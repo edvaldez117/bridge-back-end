@@ -2,19 +2,9 @@ const express = require('express');
 const Usuario = require('../models/usuario');
 const app = express();
 
-app.get('/verificar-email', (req, res) => {
-    if (!req.body.email) {
-        return res.status(400).json({
-            ok: false,
-            err: {
-                message: 'Correo no especificado'
-            }
-        });
-    }
-    const condicion = {
-        email: req.body.email
-    };
-    Usuario.findOne(condicion, (err, usuarioDB) => {
+app.get('/verificar-email/:email', (req, res) => {
+    const email = req.params.email;
+    Usuario.findOne({ email }, (err, usuarioDB) => {
         if (err) {
             return res.status(500).json({
                 ok: false,
