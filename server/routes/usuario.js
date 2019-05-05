@@ -46,33 +46,25 @@ app.post('/usuario', (req, res) => {
 });
 
 app.put('/usuario', verificarToken, (req, res) => {
-    const usuario = req.usuario;
-    let body = req.body;
-    body.email = usuario.email;
-    body.contrasena = body.contrasena ? String(SHA256(body.contrasena)) : usuario.contrasena;
-    body.imagenPerfil = usuario.imagenPerfil;
-    if (!body.nombreCompleto) {
-        body.nombreCompleto = usuario.nombreCompleto;
-    } else {
-        body.nombreCompleto.nombres = body.nombreCompleto.nombres || usuario.nombreCompleto.nombres;
-        body.nombreCompleto.apellido1 = body.nombreCompleto.apellido1 || usuario.nombreCompleto.apellido1;
-        body.nombreCompleto.apellido2 = body.nombreCompleto.apellido2 === null ? undefined : body.nombreCompleto.apellido2;
+    const body = req.body;
+    let usuario = req.usuario;
+    usuario.contrasena = body.contrasena ? String(SHA256(body.contrasena)) : usuario.contrasena;
+    if (body.nombreCompleto) {
+        usuario.nombreCompleto.nombres = body.nombreCompleto.nombres || usuario.nombreCompleto.nombres;
+        usuario.nombreCompleto.apellido1 = body.nombreCompleto.apellido1 || usuario.nombreCompleto.apellido1;
+        usuario.nombreCompleto.apellido2 = body.nombreCompleto.apellido2 === null ? undefined : body.nombreCompleto.apellido2;
     }
-    if (!body.direccion) {
-        body.direccion = usuario.direccion;
-    } else {
-        body.direccion.codigoPostal = body.direccion.codigoPostal || usuario.direccion.codigoPostal;
-        body.direccion.colonia = body.direccion.colonia || usuario.direccion.colonia;
-        body.direccion.calle = body.direccion.calle || usuario.direccion.calle;
-        body.direccion.numeroExterior = body.direccion.numeroExterior || usuario.direccion.numeroExterior;
-        body.direccion.numeroInterior = body.direccion.numeroInterior === null ? undefined : body.direccion.numeroInterior;
+    if (body.direccion) {
+        usuario.direccion.codigoPostal = body.direccion.codigoPostal || usuario.direccion.codigoPostal;
+        usuario.direccion.colonia = body.direccion.colonia || usuario.direccion.colonia;
+        usuario.direccion.calle = body.direccion.calle || usuario.direccion.calle;
+        usuario.direccion.numeroExterior = body.direccion.numeroExterior || usuario.direccion.numeroExterior;
+        usuario.direccion.numeroInterior = body.direccion.numeroInterior === null ? undefined : body.direccion.numeroInterior;
     }
-    body.telefono = body.telefono || usuario.telefono;
-    body.isAdmin = usuario.isAdmin;
-    body.activo = usuario.activo;
-    Usuario.findByIdAndUpdate(req.usuario._id, body, { new: true }, (err, usuarioDB) => {
+    usuario.telefono = body.telefono || usuario.telefono;
+    usuario.save((err, usuarioDB) => {
         if (err) {
-            return res.status(400).json({
+            return res.status(500).json({
                 ok: false,
                 err
             });
