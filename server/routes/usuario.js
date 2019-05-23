@@ -3,6 +3,7 @@ const SHA256 = require('crypto-js/sha256');
 const fileUpload = require('express-fileupload');
 const fs = require('fs');
 const Usuario = require('../models/usuario');
+const Auto = require('../models/auto');
 const { verificarToken } = require('../middlewares/autenticacion');
 const { borrarArchivo, getPathImagen } = require('../tools/tools');
 const app = express();
@@ -85,9 +86,11 @@ app.put('/usuario', verificarToken, (req, res) => {
 });
 
 app.delete('/usuario', verificarToken, (req, res) => {
-    Usuario.findByIdAndUpdate(req.usuario._id, { activo: false }, (err, usuarioDB) => {
+    let usuario = req.usuario;
+    usuario.activo = false;
+    usuario.save((err, usuarioDB) => {
         if (err) {
-            return res.status(400).json({
+            return res.status(500).json({
                 ok: false,
                 err
             });
@@ -100,9 +103,11 @@ app.delete('/usuario', verificarToken, (req, res) => {
                 }
             });
         }
-        res.json({
-            ok: true,
-            message: 'Usuario eliminado con éxito'
+        Auto.deleteMany({ usuario: usuarioDB._id }, (err) => {
+            res.json({
+                ok: true,
+                message: 'Usuario eliminado con éxito'
+            });
         });
     });
 });

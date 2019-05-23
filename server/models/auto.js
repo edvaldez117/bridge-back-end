@@ -6,12 +6,12 @@ const autoSchema = new Schema({
     modelo: {
         type: Schema.Types.ObjectId,
         ref: 'Modelo',
-        required: [true, 'El modelo del auto es obligatorio']
+        required: [true, 'El ID del modelo del auto es obligatorio']
     },
     usuario: {
         type: Schema.Types.ObjectId,
         ref: 'Usuario',
-        required: [true, 'El usuario es obligatorio']
+        required: [true, 'El ID del usuario es obligatorio']
     },
     precio: {
         type: Number,
@@ -19,7 +19,8 @@ const autoSchema = new Schema({
     },
     extranjero: {
         type: Boolean,
-        default: false
+        default: false,
+        required: [true, 'Es necesario especificar si el auto es extranjero o no']
     },
     kilometraje: {
         type: Number,
@@ -27,11 +28,13 @@ const autoSchema = new Schema({
     },
     totalDuenos: {
         type: Number,
-        default: '1'
+        default: '1',
+        required: [true, 'Es necesario especificar el total de dueños']
     },
     totalAccidentes: {
         type: Number,
-        default: 0
+        default: 0,
+        required: [true, 'Es necesario especificar el número de accidentes que ha tenido el auto']
     },
     tipoMotor: {
         type: String,
@@ -43,15 +46,18 @@ const autoSchema = new Schema({
         enum: {
             values: [0, 1],
             message: '{VALUE} no es un tipo de transmision válido'
-        }
+        },
+        required: [true, 'Es necesario especificar el tipo de transmision']
     },
     alarma: {
         type: Boolean,
-        default: true
+        default: true,
+        required: [true, 'Es necesario especificar si el auto cuenta con alarma']
     },
     aireAcondicionado: {
         type: Boolean,
-        default: true
+        default: true,
+        required: [true, 'Es necesario especificar si el auto cuenta con aire acondicionado']
     },
     colorInterior: {
         type: String,
@@ -63,48 +69,65 @@ const autoSchema = new Schema({
     },
     vidriosElectricos: {
         type: Boolean,
-        default: true
+        default: true,
+        required: [true, 'Es necesario especificar si el auto cuenta con vidrios electricos']
     },
     puertasElectricas: {
         type: Boolean,
-        default: false
+        default: false,
+        required: [true, 'Es necesario especificar si el auto cuenta con puertas electricas']
     },
     bolsasDeAirePiloto: {
         type: Boolean,
-        default: true
+        default: true,
+        required: [true, 'Es necesario especificar si el auto cuenta con bolsas de aire para el piloto']
     },
     bolsasDeAirePasajero: {
         type: Boolean,
-        default: true
+        default: true,
+        required: [true, 'Es necesario especificar si el auto cuenta con bolsas de aire para el pasajero']
     },
     bolsasDeAireLaterales: {
         type: Boolean,
-        default: true
+        default: true,
+        required: [true, 'Es necesario especificar si el auto cuenta con bolsas de aire laterales']
     },
     seguroDeNinos: {
         type: Boolean,
-        default: true
+        default: true,
+        required: [true, 'Es necesario especificar si las puertas cuenta con seguro para niños']
     },
     controlDeEstabilidad: {
         type: Boolean,
-        default: true
+        default: true,
+        required: [true, 'Es necesario especificar si el auto cuenta con control de estabilidad']
     },
     bluetooth: {
         type: Boolean,
-        default: true
+        default: true,
+        required: [true, 'Es necesario especificar si el auto cuenta con bluetooth']
     },
     sensorFrontal: {
         type: Boolean,
-        default: true
+        default: true,
+        required: [true, 'Es necesario especificar si el auto cuenta con sensor frontal']
     },
     sensorTrasero: {
         type: Boolean,
-        default: true
+        default: true,
+        required: [true, 'Es necesario especificar si el auto cuenta con sensor trasero']
     },
     camaraTrasera: {
         type: Boolean,
-        default: true
+        default: true,
+        required: [true, 'Es necesario especificar si el auto cuenta con camara trasera']
     }
 });
+
+autoSchema.methods.toJSON = function() {
+    let auto = this.toObject();
+    delete auto.usuario;
+    return auto;
+}
 
 module.exports = mongoose.model('Auto', autoSchema, 'auto');
