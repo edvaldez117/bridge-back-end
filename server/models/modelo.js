@@ -19,4 +19,10 @@ const modeloSchema = new Schema({
     }
 });
 
+modeloSchema.methods.toJSON = function() {
+    let modelo = this.toObject();
+    delete modelo.activo;
+    return modelo;
+}
+
 module.exports = mongoose.model('Modelo', modeloSchema, 'modelo');
