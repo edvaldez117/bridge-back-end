@@ -3,25 +3,18 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const modeloSchema = new Schema({
-    fabricante: {
+    marca: {
         type: Schema.Types.ObjectId,
-        ref: 'Fabricante',
-        required: [true, 'El ID del fabricante es obligatorio.']
+        ref: 'Marca',
+        required: [true, 'El ID de la marca es obligatorio']
     },
     nombre: {
         type: String,
-        required: [true, 'El nombre del modelo es obligatorio.']
-    },
-    anio: {
-        type: String,
-        required: [true, 'El año del modelo es obligatorio.']
-    },
-    serie: {
-        type: String,
-        required: [true, 'La serie del modelo es obligatoria.']
+        required: [true, 'El nombre del modelo es obligatorio']
     },
     activo: {
         type: Boolean,
+        required: [true, 'El estado del modelo (activo / inactivo) es obligatorio'],
         default: true
     }
 });

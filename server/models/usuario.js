@@ -6,7 +6,7 @@ const Schema = mongoose.Schema;
 const nombreCompletoSchema = new Schema({
     nombres: {
         type: String,
-        required: [true, 'El nombre es obligatorio.']
+        required: [true, 'El nombre es obligatorio']
     },
     apellido1: {
         type: String,

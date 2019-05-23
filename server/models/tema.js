@@ -7,27 +7,27 @@ const temaSchema = new Schema({
     nombre: {
         type: String,
         unique: true,
-        required: [true, 'El nombre del tema es obligatorio.']
+        required: [true, 'El nombre del tema es obligatorio']
     },
     colorPrimario: {
         type: String,
-        required: [true, 'El color primario es obligatorio.']
+        required: [true, 'El color primario es obligatorio']
     },
     colorFuente: {
         type: String,
-        required: [true, 'El color de la fuente es obligatorio.']
+        required: [true, 'El color de la fuente es obligatorio']
     },
     colorSecundario: {
         type: String,
-        required: [true, 'El color secundario es obligatorio.']
+        required: [true, 'El color secundario es obligatorio']
     },
     colorAcentuador: {
         type: String,
-        required: [true, 'El color acentuador es obligatorio.']
+        required: [true, 'El color acentuador es obligatorio']
     },
     fondo: {
         type: String,
-        required: [true, 'El color de fondo es obligatorio.']
+        required: [true, 'El color de fondo es obligatorio']
     },
     activo: {
         type: Boolean,
@@ -35,6 +35,6 @@ const temaSchema = new Schema({
     }
 });
 
-temaSchema.plugin(uniqueValidator, { message: 'El {PATH} del tema debe ser único.' });
+temaSchema.plugin(uniqueValidator, { message: 'El {PATH} del tema debe ser único' });
 
 module.exports = mongoose.model('Tema', temaSchema, 'tema');

@@ -23,6 +23,6 @@ const provedorDeEnvioSchema = new Schema({
     }
 });
 
-provedorSchema.plugin(uniqueValidator, { message: 'El {PATH} debe ser único.' });
+provedorSchema.plugin(uniqueValidator, { message: 'El {PATH} debe ser único' });
 
 module.exports = mongoose.model('ProveedorDeEnvio', provedorDeEnvioSchema, 'proveedorDeEnvio');

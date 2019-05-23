@@ -3,15 +3,15 @@ const uniqueValidator = require('mongoose-unique-validator');
 
 const Schema = mongoose.Schema;
 
-const fabricanteSchema = new Schema({
+const marcaSchema = new Schema({
     nombre: {
         type: String,
         unique: true,
-        required: [true, 'El nombre del fabricante es obligatorio.']
+        required: [true, 'El nombre de la marca es obligatorio']
     },
     pais: {
         type: String,
-        required: [true, 'El país del fabricante es obligatorio.']
+        required: [true, 'El país de la marca es obligatorio']
     },
     paginaWeb: {
         type: String
@@ -22,6 +22,6 @@ const fabricanteSchema = new Schema({
     }
 });
 
-fabricanteSchema.plugin(uniqueValidator, { message: 'El {PATH} del fabricante debe ser único.' });
+marcaSchema.plugin(uniqueValidator, { message: 'El {PATH} de la marca debe ser único' });
 
-module.exports = mongoose.model('Fabricante', fabricanteSchema, 'fabricante');
+module.exports = mongoose.model('Marca', marcaSchema, 'marca');
