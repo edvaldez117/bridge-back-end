@@ -1,19 +1,20 @@
 const express = require('express');
 const SHA256 = require('crypto-js/sha256');
 const fileUpload = require('express-fileupload');
-const fs = require('fs');
 const Usuario = require('../models/usuario');
 const Auto = require('../models/auto');
 const { verificarToken } = require('../middlewares/autenticacion');
-const { borrarArchivo, getPathImagen } = require('../tools/tools');
+const { borrarArchivo, base64 } = require('../tools/tools');
 const app = express();
 
 app.use(fileUpload({ useTempFiles: true }));
 
 app.get('/usuario', verificarToken, (req, res) => {
+    let usuario = req.usuario;
+    usuario.imagenPerfil = base64(usuario.imagenPerfil, 'usuarios');
     res.json({
         ok: true,
-        usuario: req.usuario
+        usuario
     });
 });
 
@@ -87,6 +88,10 @@ app.put('/usuario', verificarToken, (req, res) => {
 
 app.delete('/usuario', verificarToken, (req, res) => {
     let usuario = req.usuario;
+    if (usuario.imagenPerfil !== 'default.jpg') {
+        borrarArchivo(usuario.imagenPerfil, 'usuarios');
+        usuario.imagenPerfil = 'default.jpg';
+    }
     usuario.activo = false;
     usuario.save((err, usuarioDB) => {
         if (err) {
@@ -110,16 +115,6 @@ app.delete('/usuario', verificarToken, (req, res) => {
             });
         });
     });
-});
-
-app.get('/usuario/imagen', verificarToken, (req, res) => {
-    let pathImagen = getPathImagen(req.usuario.imagenPerfil, 'usuarios');
-    if (!fs.existsSync(pathImagen)) {
-        req.usuario.imagenPerfil = 'default.jpg';
-        req.usuario.save();
-        pathImagen = getPathImagen(req.usuario.imagenPerfil, 'usuarios');
-    }
-    res.sendFile(pathImagen);
 });
 
 app.put('/usuario/imagen', verificarToken, (req, res) => {
