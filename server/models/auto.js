@@ -28,7 +28,7 @@ const autoSchema = new Schema({
     },
     totalDuenos: {
         type: Number,
-        default: '1',
+        default: 1,
         required: [true, 'Es necesario especificar el total de dueños']
     },
     totalAccidentes: {

@@ -63,6 +63,7 @@ app.get('/autos', (req, res) => {
 
 app.post('/auto', verificarToken, (req, res) => {
     let body = req.body;
+    body._id = undefined;
     body.usuario = req.usuario._id;
     body.extranjero = body.extranjero === null ? undefined : body.extranjero;
     body.totalDuenos = body.totalDuenos === null ? undefined : body.totalDuenos;

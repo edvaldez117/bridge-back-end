@@ -20,6 +20,7 @@ app.get('/usuario', verificarToken, (req, res) => {
 
 app.post('/usuario', (req, res) => {
     let body = req.body;
+    body._id = undefined;
     body.activo = true;
     body.isAdmin = false;
     body.imagenPerfil = 'default.jpg'
