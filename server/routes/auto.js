@@ -4,6 +4,63 @@ const Auto = require('../models/auto');
 
 const app = express();
 
+app.get('/auto/:id', (req, res) => {
+    Auto.findById(req.params.id, (err, autoDB) => {
+        if (err) {
+            return res.status(400).json({
+                ok: false,
+                err
+            });
+        }
+        if (!autoDB) {
+            return res.status(400).json({
+                ok: false,
+                err: {
+                    message: 'No se encontro un auto con el id especificado'
+                }
+            });
+        }
+        res.json({
+            ok: true,
+            auto: autoDB
+        });
+    });
+});
+
+app.get('/autos', (req, res) => {
+    let { modelo, precio } = req.query;
+    let condiciones = {};
+    if (modelo || precio) {
+        condiciones.$and = [];
+        if (modelo) {
+            condiciones.$and.push({ modelo });
+        }
+        if (precio) {
+            condiciones.$and.push({ precio: { $lte: precio } });
+        }
+    }
+    Auto.find(condiciones, (err, autos) => {
+        if (err) {
+            return res.status(400).json({
+                ok: false,
+                err
+            });
+        }
+        if (autos.length === 0) {
+            return res.status(400).json({
+                ok: false,
+                err: {
+                    message: 'No se encontraron autos con las especificaciones solicitadas'
+                }
+            });
+        }
+        res.json({
+            ok: true,
+            autos
+        });
+    });
+});
+
 app.post('/auto', verificarToken, (req, res) => {
     let body = req.body;
     body.usuario = req.usuario._id;
