@@ -7,7 +7,11 @@ const autoSchema = new Schema({
     modelo: {
         type: Schema.Types.ObjectId,
         ref: 'Modelo',
-        autopopulate: true,
+        autopopulate: {
+            match: {
+                activo: true
+            }
+        },
         required: [true, 'El ID del modelo del auto es obligatorio']
     },
     usuario: {
@@ -131,8 +135,12 @@ const autoSchema = new Schema({
 autoSchema.methods.toJSON = function() {
     let auto = this.toObject();
     delete auto.usuario;
-    delete auto.modelo.activo;
-    delete auto.modelo.marca.activo;
+    if (auto.modelo) {
+        delete auto.modelo.activo;
+        if (auto.modelo.marca) {
+            delete auto.modelo.marca.activo;
+        }
+    }
     return auto;
 }
 

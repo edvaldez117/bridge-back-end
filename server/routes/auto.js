@@ -5,14 +5,15 @@ const Auto = require('../models/auto');
 const app = express();
 
 app.get('/auto/:id', (req, res) => {
-    Auto.findById(req.params.id, (err, autoDB) => {
+    const id = req.params.id;
+    Auto.findById(id, (err, autoDB) => {
         if (err) {
             return res.status(400).json({
                 ok: false,
                 err
             });
         }
-        if (!autoDB) {
+        if (!autoDB || !autoDB.modelo || !autoDB.modelo.marca) {
             return res.status(400).json({
                 ok: false,
                 err: {
@@ -28,7 +29,7 @@ app.get('/auto/:id', (req, res) => {
 });
 
 app.get('/autos', (req, res) => {
-    let { modelo, precio } = req.query;
+    const { marca, modelo, precio } = req.query;
     let condiciones = {};
     if (modelo || precio) {
         condiciones.$and = [];
@@ -46,6 +47,12 @@ app.get('/autos', (req, res) => {
                 err
             });
         }
+        autos = autos.filter((auto) => {
+            if (marca) {
+                return auto.modelo && auto.modelo.marca && auto.modelo.marca._id.equals(marca);
+            }
+            return auto.modelo && auto.modelo.marca;
+        });
         if (autos.length === 0) {
             return res.status(400).json({
                 ok: false,

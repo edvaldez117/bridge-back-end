@@ -7,7 +7,11 @@ const modeloSchema = new Schema({
     marca: {
         type: Schema.Types.ObjectId,
         ref: 'Marca',
-        autopopulate: true,
+        autopopulate: {
+            match: {
+                activo: true
+            }
+        },
         required: [true, 'El ID de la marca es obligatorio']
     },
     nombre: {
