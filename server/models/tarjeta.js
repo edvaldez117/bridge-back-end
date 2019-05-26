@@ -36,6 +36,8 @@ const tarjetaSchema = new Schema({
         type: Boolean,
         default: true
     }
+}, {
+    versionKey: false
 });
 
 module.exports = mongoose.model('Tarjeta', tarjetaSchema, 'tarjeta');

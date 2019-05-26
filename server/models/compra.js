@@ -44,6 +44,8 @@ const compraSchema = new Schema({
         type: Number,
         required: [true, 'El costo de envio es obligatorio']
     }
+}, {
+    versionKey: false
 });
 
 compraSchema.plugin(uniqueValidator, { message: 'El {PATH} ya fue comprado' });

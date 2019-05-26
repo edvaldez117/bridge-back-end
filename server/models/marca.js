@@ -20,6 +20,8 @@ const marcaSchema = new Schema({
         type: Boolean,
         default: true
     }
+}, {
+    versionKey: false
 });
 
 marcaSchema.methods.toJSON = function() {

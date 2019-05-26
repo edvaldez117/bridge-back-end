@@ -15,7 +15,9 @@ const nombreCompletoSchema = new Schema({
     apellido2: {
         type: String
     }
-}, { _id: false });
+}, {
+    _id: false
+});
 
 const direccionSchema = new Schema({
     codigoPostal: {
@@ -37,7 +39,9 @@ const direccionSchema = new Schema({
     numeroInterior: {
         type: String
     }
-}, { _id: false });
+}, {
+    _id: false
+});
 
 const usuarioSchema = new Schema({
     email: {
@@ -80,6 +84,8 @@ const usuarioSchema = new Schema({
         deafult: true,
         required: [true, 'El campo activo no puede ser nulo']
     }
+}, {
+    versionKey: false
 });
 
 usuarioSchema.methods.toJSON = function() {

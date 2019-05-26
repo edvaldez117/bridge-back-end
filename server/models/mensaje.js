@@ -17,6 +17,8 @@ const mensajeSchema = new Schema({
         type: String,
         required: [true, 'El contenido del mensaje no puede estar vacío']
     }
+}, {
+    versionKey: false
 });
 
 module.exports = mongoose.model('Mensaje', mensajeSchema, 'mensaje');

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const autopopulate = require('mongoose-autopopulate');
 
 const Schema = mongoose.Schema;
 
@@ -6,6 +7,7 @@ const modeloSchema = new Schema({
     marca: {
         type: Schema.Types.ObjectId,
         ref: 'Marca',
+        autopopulate: true,
         required: [true, 'El ID de la marca es obligatorio']
     },
     nombre: {
@@ -17,6 +19,8 @@ const modeloSchema = new Schema({
         required: [true, 'El estado del modelo (activo / inactivo) es obligatorio'],
         default: true
     }
+}, {
+    versionKey: false
 });
 
 modeloSchema.methods.toJSON = function() {
@@ -24,5 +28,7 @@ modeloSchema.methods.toJSON = function() {
     delete modelo.activo;
     return modelo;
 }
+
+modeloSchema.plugin(autopopulate);
 
 module.exports = mongoose.model('Modelo', modeloSchema, 'modelo');

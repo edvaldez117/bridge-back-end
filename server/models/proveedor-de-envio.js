@@ -21,6 +21,8 @@ const provedorDeEnvioSchema = new Schema({
         type: Number,
         required: [true, 'Los días de entrega son obligatorios']
     }
+}, {
+    versionKey: false
 });
 
 provedorSchema.plugin(uniqueValidator, { message: 'El {PATH} debe ser único' });

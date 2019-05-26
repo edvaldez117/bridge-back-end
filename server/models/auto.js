@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const autopopulate = require('mongoose-autopopulate');
 
 const Schema = mongoose.Schema;
 
@@ -6,6 +7,7 @@ const autoSchema = new Schema({
     modelo: {
         type: Schema.Types.ObjectId,
         ref: 'Modelo',
+        autopopulate: true,
         required: [true, 'El ID del modelo del auto es obligatorio']
     },
     usuario: {
@@ -122,12 +124,18 @@ const autoSchema = new Schema({
         default: true,
         required: [true, 'Es necesario especificar si el auto cuenta con camara trasera']
     }
+}, {
+    versionKey: false
 });
 
 autoSchema.methods.toJSON = function() {
     let auto = this.toObject();
     delete auto.usuario;
+    delete auto.modelo.activo;
+    delete auto.modelo.marca.activo;
     return auto;
 }
+
+autoSchema.plugin(autopopulate);
 
 module.exports = mongoose.model('Auto', autoSchema, 'auto');

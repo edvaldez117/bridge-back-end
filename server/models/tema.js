@@ -33,6 +33,8 @@ const temaSchema = new Schema({
         type: Boolean,
         default: true
     }
+}, {
+    versionKey: false
 });
 
 temaSchema.plugin(uniqueValidator, { message: 'El {PATH} del tema debe ser único' });
