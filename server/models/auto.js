@@ -127,6 +127,11 @@ const autoSchema = new Schema({
         type: Boolean,
         default: true,
         required: [true, 'Es necesario especificar si el auto cuenta con camara trasera']
+    },
+    imagenes: {
+        type: [String],
+        default: ['default.jpg'],
+        required: true
     }
 }, {
     versionKey: false

@@ -21,7 +21,16 @@ const base64 = (nombreImagen, tipo) => {
     return fs.readFileSync(pathImagen, { encoding: 'base64' });
 }
 
+const getImagenesAuto = (auto) => {
+    let imagenesBase64 = [];
+    for (const imagen of auto.imagenes) {
+        imagenesBase64.push(base64(imagen, 'autos'));
+    }
+    auto.imagenes = imagenesBase64;
+}
+
 module.exports = {
     borrarArchivo,
-    base64
+    base64,
+    getImagenesAuto
 }

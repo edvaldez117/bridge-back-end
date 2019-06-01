@@ -1,5 +1,6 @@
 const express = require('express');
 const { verificarToken } = require('../middlewares/autenticacion');
+const { getImagenesAuto } = require('../tools/tools');
 const Auto = require('../models/auto');
 
 const app = express();
@@ -21,6 +22,7 @@ app.get('/auto/:id', (req, res) => {
                 }
             });
         }
+        getImagenesAuto(autoDB);
         res.json({
             ok: true,
             auto: autoDB
@@ -89,6 +91,7 @@ app.post('/auto', verificarToken, (req, res) => {
     body.sensorFrontal = body.sensorFrontal === null ? undefined : body.sensorFrontal;
     body.sensorTrasero = body.sensorTrasero === null ? undefined : body.sensorTrasero;
     body.camaraTrasera = body.camaraTrasera === null ? undefined : body.camaraTrasera;
+    body.imagenes = ['default.jpg'];
     const auto = new Auto(body);
     auto.save((err, autoDB) => {
         if (err) {
