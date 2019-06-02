@@ -102,14 +102,46 @@ app.put('/auto/:id', [verificarToken, verificarAuto], (req, res) => {
     body.usuario = undefined;
     for (const propiedad in auto) {
         if (body[propiedad] !== null && body[propiedad] !== undefined) {
+            if (propiedad === 'modelo' && typeof body[propiedad] === 'object')
+                continue;
             auto[propiedad] = body[propiedad];
         }
     }
+    auto.modelo = auto.modelo._id;
     auto.save((err, autoDB) => {
+        if (err) {
+            return res.status(400).json({
+                ok: false,
+                err
+            });
+        }
+        res.json({
+            ok: true,
+            auto: autoDB
+        });
+    });
+});
+
+app.delete('/auto/:id', [verificarToken, verificarAuto], (req, res) => {
+    const { auto } = req;
+    for (const imagen of auto.imagenes) {
+        if (imagen !== 'default.jpg') {
+            borrarArchivo(imagen, 'autos');
+        }
+    }
+    Auto.findByIdAndDelete(auto._id, (err, autoDB) => {
         if (err) {
             return res.status(500).json({
                 ok: false,
                 err
+            });
+        }
+        if (!autoDB) {
+            return res.status(400).json({
+                ok: false,
+                err: {
+                    message: 'El auto especificado no existe en la base de datos'
+                }
             });
         }
         res.json({
