@@ -3,14 +3,14 @@ const SHA256 = require('crypto-js/sha256');
 const fileUpload = require('express-fileupload');
 const Usuario = require('../models/usuario');
 const Auto = require('../models/auto');
-const { verificarToken } = require('../middlewares/autenticacion');
+const { verificarToken, verificarImagen } = require('../middlewares/middlewares');
 const { borrarArchivo, base64 } = require('../tools/tools');
 const app = express();
 
 app.use(fileUpload({ useTempFiles: true }));
 
 app.get('/usuario', verificarToken, (req, res) => {
-    let usuario = req.usuario;
+    let { usuario } = req;
     usuario.imagenPerfil = base64(usuario.imagenPerfil, 'usuarios');
     res.json({
         ok: true,
@@ -19,7 +19,7 @@ app.get('/usuario', verificarToken, (req, res) => {
 });
 
 app.post('/usuario', (req, res) => {
-    let body = req.body;
+    let { body } = req;
     body._id = undefined;
     body.activo = true;
     body.isAdmin = false;
@@ -49,8 +49,8 @@ app.post('/usuario', (req, res) => {
 });
 
 app.put('/usuario', verificarToken, (req, res) => {
-    const body = req.body;
-    let usuario = req.usuario;
+    const { body } = req;
+    let { usuario } = req;
     usuario.contrasena = body.contrasena ? String(SHA256(body.contrasena)) : usuario.contrasena;
     if (body.nombreCompleto) {
         usuario.nombreCompleto.nombres = body.nombreCompleto.nombres || usuario.nombreCompleto.nombres;
@@ -88,7 +88,7 @@ app.put('/usuario', verificarToken, (req, res) => {
 });
 
 app.delete('/usuario', verificarToken, (req, res) => {
-    let usuario = req.usuario;
+    let { usuario } = req;
     if (usuario.imagenPerfil !== 'default.jpg') {
         borrarArchivo(usuario.imagenPerfil, 'usuarios');
         usuario.imagenPerfil = 'default.jpg';
@@ -118,29 +118,9 @@ app.delete('/usuario', verificarToken, (req, res) => {
     });
 });
 
-app.put('/usuario/imagen', verificarToken, (req, res) => {
-    if (!req.files) {
-        return res.status(400).json({
-            ok: false,
-            err: {
-                message: 'No se ha seleccionado ninguna imagen'
-            }
-        });
-    }
-    const formatosValidos = ['png', 'gif', 'jpg', 'jpeg'];
-    const imagen = req.files.imagen;
-    let nombreImagen = imagen.name;
-    nombreImagen = nombreImagen.split('.');
-    const formatoImagen = nombreImagen[nombreImagen.length - 1];
-    if (formatosValidos.indexOf(formatoImagen) < 0) {
-        return res.status(400).json({
-            ok: false,
-            err: {
-                message: 'Los formatos para imagen permitidos son ' + formatosValidos.join(', ')
-            }
-        });
-    }
-    const nuevoNombre = `${req.usuario.email}-${new Date().getMilliseconds()}.${formatoImagen}`;
+app.put('/usuario/imagen', [verificarToken, verificarImagen], (req, res) => {
+    const { imagen } = req.files;
+    const nuevoNombre = `${req.usuario.email}-${new Date().getMilliseconds()}.${req.formatoImagen}`;
     imagen.mv(`uploads/usuarios/${nuevoNombre}`, (err) => {
         if (err) {
             return res.status(500).json({

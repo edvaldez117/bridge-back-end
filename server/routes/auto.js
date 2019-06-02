@@ -1,12 +1,12 @@
 const express = require('express');
-const { verificarToken } = require('../middlewares/autenticacion');
-const { getImagenesAuto } = require('../tools/tools');
+const { verificarToken, verificarAuto, verificarImagen } = require('../middlewares/middlewares');
+const { getImagenesAuto, borrarArchivo } = require('../tools/tools');
 const Auto = require('../models/auto');
 
 const app = express();
 
 app.get('/auto/:id', (req, res) => {
-    const id = req.params.id;
+    const { id } = req.params;
     Auto.findById(id, (err, autoDB) => {
         if (err) {
             return res.status(400).json({
@@ -71,7 +71,7 @@ app.get('/autos', (req, res) => {
 });
 
 app.post('/auto', verificarToken, (req, res) => {
-    let body = req.body;
+    let { body } = req;
     body._id = undefined;
     body.usuario = req.usuario._id;
     body.extranjero = body.extranjero === null ? undefined : body.extranjero;
@@ -103,6 +103,38 @@ app.post('/auto', verificarToken, (req, res) => {
         res.status(201).json({
             ok: true,
             auto: autoDB
+        });
+    });
+});
+
+app.put('/auto/imagen-principal/:id', [verificarToken, verificarAuto, verificarImagen], (req, res) => {
+    const { imagen } = req.files;
+    const { formatoImagen } = req;
+    let { auto } = req;
+    const nuevoNombre = `${auto._id}-0-${new Date().getMilliseconds()}.${formatoImagen}`;
+    imagen.mv(`uploads/autos/${nuevoNombre}`, (err) => {
+        if (err) {
+            return res.status(500).json({
+                ok: false,
+                err
+            });
+        }
+        if (auto.imagenes[0] !== 'default.jpg') {
+            borrarArchivo(auto.imagenes[0], 'autos')
+        }
+        auto.imagenes[0] = nuevoNombre;
+        auto.markModified('imagenes');
+        auto.save((err, autoDB) => {
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    err
+                });
+            }
+            res.json({
+                ok: true,
+                auto: autoDB
+            });
         });
     });
 });

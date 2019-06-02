@@ -4,7 +4,7 @@ const Modelo = require('../models/modelo');
 const app = express();
 
 app.get('/modelos/:marca', (req, res) => {
-    const marca = req.params.marca;
+    const { marca } = req.params;
     Modelo.find({ marca, activo: true }, (err, modelos) => {
         if (err) {
             return res.status(400).json({

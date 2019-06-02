@@ -5,7 +5,7 @@ const Usuario = require('../models/usuario');
 const app = express();
 
 app.post('/login', (req, res) => {
-    const body = req.body;
+    const { body } = req;
     if (!body.email || !body.contrasena) {
         return res.status(400).json({
             ok: false,

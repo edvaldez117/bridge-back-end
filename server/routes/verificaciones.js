@@ -3,7 +3,7 @@ const Usuario = require('../models/usuario');
 const app = express();
 
 app.get('/verificar-email/:email', (req, res) => {
-    const email = req.params.email;
+    const { email } = req.params;
     Usuario.findOne({ email }, (err, usuarioDB) => {
         if (err) {
             return res.status(500).json({
