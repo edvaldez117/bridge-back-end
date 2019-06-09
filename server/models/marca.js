@@ -18,6 +18,7 @@ const marcaSchema = new Schema({
     },
     activo: {
         type: Boolean,
+        required: [true, 'El campo activo es requerido'],
         default: true
     }
 }, {

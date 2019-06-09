@@ -96,8 +96,21 @@ const verificarImagen = (req, res, next) => {
     next();
 }
 
+const verificarRol = (req, res, next) => {
+    if (!req.usuario.isAdmin) {
+        return res.status(401).json({
+            ok: false,
+            err: {
+                message: 'El usuario tiene permiso para realizar esta acción'
+            }
+        });
+    }
+    next();
+}
+
 module.exports = {
     verificarToken,
     verificarAuto,
-    verificarImagen
+    verificarImagen,
+    verificarRol
 }
