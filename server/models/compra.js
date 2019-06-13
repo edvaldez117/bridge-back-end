@@ -24,9 +24,9 @@ const compraSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'ProveedorDeEnvio'
     },
-    total: {
+    subtotal: {
         type: Number,
-        required: [true, 'El total es obligatorio']
+        required: [true, 'El subtotal es obligatorio']
     },
     iva: {
         type: Number,
@@ -36,9 +36,14 @@ const compraSchema = new Schema({
         type: Number,
         required: [true, 'La comision es obligatoria']
     },
+    total: {
+        type: Number,
+        required: [true, 'El total es obligatorio']
+    },
     fecha: {
         type: Date,
-        default: Date.now()
+        default: Date.now(),
+        required: [true, 'La fecha de compra es obligatoria']
     },
     costoEnvio: {
         type: Number,
@@ -47,6 +52,12 @@ const compraSchema = new Schema({
 }, {
     versionKey: false
 });
+
+compraSchema.methods.ToJSON = function() {
+    let compra = this.ToObject();
+    delete compra.usuario;
+    return compra;
+}
 
 compraSchema.plugin(uniqueValidator, { message: 'El {PATH} ya fue comprado' });
 

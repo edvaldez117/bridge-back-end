@@ -132,6 +132,11 @@ const autoSchema = new Schema({
         type: [String],
         default: ['default.jpg'],
         required: true
+    },
+    autoVendido: {
+        type: Boolean,
+        default: false,
+        required: [true, 'Es necesario especificar si el auto está vendido']
     }
 }, {
     versionKey: false

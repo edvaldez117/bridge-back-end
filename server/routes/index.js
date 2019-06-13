@@ -8,5 +8,6 @@ app.use(require('./marca'));
 app.use(require('./modelo'));
 app.use(require('./auto'));
 app.use(require('./tarjeta'));
+app.use(require('./compra'));
 
 module.exports = app;

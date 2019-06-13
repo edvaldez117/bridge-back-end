@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const SHA256 = require('crypto-js/sha256');
 const Usuario = require('../models/usuario');
 const Auto = require('../models/auto');
+const Tarjeta = require('../models/tarjeta');
 
 const verificarToken = (req, res, next) => {
     const token = req.get('Authorization');
@@ -108,9 +109,52 @@ const verificarRol = (req, res, next) => {
     next();
 }
 
+const verificarAutoDisponible = (req, res, next) => {
+    Auto.findOne({ _id: req.body.auto, autoVendido: false }, (err, autoDB) => {
+        if (err) {
+            return res.status(400).json({
+                ok: false,
+                err
+            });
+        }
+        if (!autoDB) {
+            return res.status(400).json({
+                ok: false,
+                err: {
+                    message: 'El auto especificado no se encuentra disponible para vender'
+                }
+            });
+        }
+        req.auto = autoDB;
+        next();
+    });
+}
+
+const verificarTarjeta = (req, res, next) => {
+    Tarjeta.findOne({ _id: req.body.tarjeta, usuario: req.usuario._id }, (err, tarjetaDB) => {
+        if (err) {
+            return res.status(400).json({
+                ok: false,
+                err
+            });
+        }
+        if (!tarjetaDB) {
+            return res.status(400).json({
+                ok: false,
+                err: {
+                    message: 'La tarjeta especificada no esta asociada con el usuario'
+                }
+            });
+        }
+        next();
+    });
+}
+
 module.exports = {
     verificarToken,
     verificarAuto,
     verificarImagen,
-    verificarRol
+    verificarRol,
+    verificarAutoDisponible,
+    verificarTarjeta
 }

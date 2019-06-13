@@ -7,7 +7,7 @@ const app = express();
 
 app.get('/auto/:id', (req, res) => {
     const { id } = req.params;
-    Auto.findById(id, (err, autoDB) => {
+    Auto.findOne({ _id: id, autoVendido: false }, (err, autoDB) => {
         if (err) {
             return res.status(400).json({
                 ok: false,
@@ -32,7 +32,7 @@ app.get('/auto/:id', (req, res) => {
 
 app.get('/autos', (req, res) => {
     const { marca, modelo, precio } = req.query;
-    let condiciones = {};
+    let condiciones = { autoVendido: false };
     if (modelo || precio) {
         condiciones.$and = [];
         if (modelo) {
@@ -75,6 +75,7 @@ app.post('/auto', verificarToken, (req, res) => {
     body._id = undefined;
     body.usuario = req.usuario._id;
     body.imagenes = ['default.jpg'];
+    body.autoVendido = false;
     for (const propiedad in body) {
         if (body[propiedad] === null) {
             body[propiedad] = undefined;
