@@ -14,7 +14,8 @@ const tarjetaSchema = new Schema({
         enum: {
             values: ['Debito', 'Credito'],
             message: '{VALUE} no es un tipo de tarjeta valido'
-        }
+        },
+        required: [true, 'El tipo de tarjeta (credito / debito) es obligatorio']
     },
     numero: {
         type: String,
@@ -31,13 +32,15 @@ const tarjetaSchema = new Schema({
     titular: {
         type: String,
         required: [true, 'El titular es obligatorio']
-    },
-    activo: {
-        type: Boolean,
-        default: true
     }
 }, {
     versionKey: false
 });
+
+tarjetaSchema.methods.toJSON = function() {
+    let tarjeta = this.toObject();
+    delete tarjeta.usuario;
+    return tarjeta;
+}
 
 module.exports = mongoose.model('Tarjeta', tarjetaSchema, 'tarjeta');
