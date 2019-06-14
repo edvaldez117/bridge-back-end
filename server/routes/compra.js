@@ -5,7 +5,7 @@ const app = express();
 
 app.get('/compras', [verificarToken], (req, res) => {
     const { usuario } = req;
-    Compra.find({ usuario: usuario._id }, (err, comprasDB) => {
+    Compra.find({ usuario: usuario._id }).populate('auto').exec((err, comprasDB) => {
         if (err) {
             return res.status(500).json({
                 ok: false,
@@ -21,7 +21,7 @@ app.get('/compras', [verificarToken], (req, res) => {
 
 app.get('/compra/:id', [verificarToken], (req, res) => {
     const { id } = req.params;
-    Compra.findById(id, (err, compraDB) => {
+    Compra.findById(id).populate('auto').exec((err, compraDB) => {
         if (err) {
             return res.status(400).json({
                 ok: false,

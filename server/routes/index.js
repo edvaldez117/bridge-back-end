@@ -9,5 +9,6 @@ app.use(require('./modelo'));
 app.use(require('./auto'));
 app.use(require('./tarjeta'));
 app.use(require('./compra'));
+app.use(require('./reportes'));
 
 module.exports = app;
