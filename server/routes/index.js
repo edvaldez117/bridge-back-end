@@ -10,5 +10,6 @@ app.use(require('./auto'));
 app.use(require('./tarjeta'));
 app.use(require('./compra'));
 app.use(require('./reportes'));
+app.use(require('./wish-list'));
 
 module.exports = app;

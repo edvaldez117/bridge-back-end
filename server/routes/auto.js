@@ -31,7 +31,7 @@ app.get('/auto/:id', (req, res) => {
 });
 
 app.get('/autos', (req, res) => {
-    const { marca, modelo, precio } = req.query;
+    const { marca, modelo, precio, cantidad } = req.query;
     let condiciones = { autoVendido: false };
     if (modelo || precio) {
         condiciones.$and = [];
@@ -62,6 +62,9 @@ app.get('/autos', (req, res) => {
                     message: 'No se encontraron autos con las especificaciones solicitadas'
                 }
             });
+        }
+        if (cantidad) {
+            autos = autos.slice(autos.length - cantidad);
         }
         res.json({
             ok: true,

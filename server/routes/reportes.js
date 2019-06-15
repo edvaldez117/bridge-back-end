@@ -81,7 +81,7 @@ app.get('/reporte-modelos', [verificarToken, verificarRol], (req, res) => {
             autosVendidos: { $sum: 1 },
             gananciasPorComision: { $sum: '$comision' }
         }
-    }], (err, ventasPorMarca) => {
+    }], (err, ventasPorModelo) => {
         if (err) {
             return res.json({
                 ok: false,
@@ -89,12 +89,12 @@ app.get('/reporte-modelos', [verificarToken, verificarRol], (req, res) => {
             });
         }
         let totalGanancias = 0;
-        ventasPorMarca.forEach(marca => {
+        ventasPorModelo.forEach(marca => {
             totalGanancias += marca.gananciasPorComision;
         });
         res.json({
             ok: true,
-            ventasPorMarca,
+            ventasPorModelo,
             totalGanancias
         });
     });

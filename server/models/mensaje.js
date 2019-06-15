@@ -16,6 +16,11 @@ const mensajeSchema = new Schema({
     contenido: {
         type: String,
         required: [true, 'El contenido del mensaje no puede estar vacío']
+    },
+    mensajeLeido: {
+        type: Boolean,
+        default: false,
+        required: [true, 'El estado del mensaje es obligatorio']
     }
 }, {
     versionKey: false
