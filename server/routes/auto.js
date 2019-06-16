@@ -66,6 +66,9 @@ app.get('/autos', (req, res) => {
         if (cantidad) {
             autos = autos.slice(autos.length - cantidad);
         }
+        autos.forEach(auto => {
+            getImagenesAuto(auto);
+        });
         res.json({
             ok: true,
             autos
