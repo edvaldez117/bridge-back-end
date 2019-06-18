@@ -13,12 +13,17 @@ const getPathImagen = (nombreImagen, tipo) => {
 }
 
 const base64 = (nombreImagen, tipo) => {
+    let formato;
+    let imagenBase64;
     let pathImagen = getPathImagen(nombreImagen, tipo);
-    if (fs.existsSync(pathImagen)) {
-        return fs.readFileSync(pathImagen, { encoding: 'base64' });
+    if (!fs.existsSync(pathImagen)) {
+        nombreImagen = "default.jpg";
+        pathImagen = getPathImagen(nombreImagen, tipo);
     }
-    pathImagen = getPathImagen('default.jpg', tipo);
-    return fs.readFileSync(pathImagen, { encoding: 'base64' });
+    formato = nombreImagen.split('.');
+    formato = formato[formato.length - 1];
+    imagenBase64 = fs.readFileSync(pathImagen, { encoding: 'base64' });
+    return `data:image/${formato};base64,${imagenBase64}`;
 }
 
 const getImagenesAuto = (auto) => {
