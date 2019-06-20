@@ -118,7 +118,7 @@ app.delete('/usuario', verificarToken, (req, res) => {
     });
 });
 
-app.put('/usuario/imagen', [verificarToken, verificarImagen], (req, res) => {
+app.post('/usuario/imagen', [verificarToken, verificarImagen], (req, res) => {
     const { imagen } = req.files;
     const nuevoNombre = `${req.usuario.email}-${new Date().getMilliseconds()}.${req.formatoImagen}`;
     imagen.mv(`uploads/usuarios/${nuevoNombre}`, (err) => {
