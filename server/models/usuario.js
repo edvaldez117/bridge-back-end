@@ -90,7 +90,6 @@ const usuarioSchema = new Schema({
 
 usuarioSchema.methods.toJSON = function() {
     let usuario = this.toObject();
-    delete usuario._id;
     delete usuario.contrasena;
     delete usuario.activo;
     return usuario;

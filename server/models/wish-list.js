@@ -17,10 +17,4 @@ const wishListSchema = new Schema({
     versionKey: false
 });
 
-wishListSchema.methods.toJSON = function() {
-    let wishList = this.toObject();
-    delete wishList.usuario;
-    return wishList;
-}
-
 module.exports = mongoose.model('WishList', wishListSchema, 'wishList');

@@ -53,12 +53,6 @@ const compraSchema = new Schema({
     versionKey: false
 });
 
-compraSchema.methods.ToJSON = function() {
-    let compra = this.ToObject();
-    delete compra.usuario;
-    return compra;
-}
-
 compraSchema.plugin(uniqueValidator, { message: 'El {PATH} ya fue comprado' });
 
 module.exports = mongoose.model('Compra', compraSchema, 'compra');

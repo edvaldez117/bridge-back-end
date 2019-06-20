@@ -37,10 +37,4 @@ const tarjetaSchema = new Schema({
     versionKey: false
 });
 
-tarjetaSchema.methods.toJSON = function() {
-    let tarjeta = this.toObject();
-    delete tarjeta.usuario;
-    return tarjeta;
-}
-
 module.exports = mongoose.model('Tarjeta', tarjetaSchema, 'tarjeta');
