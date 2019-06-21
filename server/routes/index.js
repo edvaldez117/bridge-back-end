@@ -12,5 +12,6 @@ app.use(require('./compra'));
 app.use(require('./reportes'));
 app.use(require('./wish-list'));
 app.use(require('./mensaje'));
+app.use(require('./cuenta'));
 
 module.exports = app;

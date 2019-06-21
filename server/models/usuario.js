@@ -76,8 +76,13 @@ const usuarioSchema = new Schema({
         required: [true, 'El campo isAdmin no puede ser nulo']
     },
     tema: {
-        type: Schema.Types.ObjectId,
-        ref: 'Tema'
+        type: String,
+        enum: {
+            values: ['default-theme', 'tritanerope-theme', 'default-theme-big', 'tritanerope-theme-big'],
+            message: '{VALUE} no es un tipo de transmision válido'
+        },
+        default: 'default-theme',
+        required: [true, 'El tema es obligatorio']
     },
     activo: {
         type: Boolean,

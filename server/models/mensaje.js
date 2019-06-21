@@ -13,14 +13,14 @@ const mensajeSchema = new Schema({
         ref: 'Usuario',
         required: [true, 'El ID del destinatario es obligatorio']
     },
+    auto: {
+        type: Schema.Types.ObjectId,
+        ref: 'Auto',
+        required: [true, 'El auto al que corresponde el mensaje es obligatorio']
+    },
     contenido: {
         type: String,
         required: [true, 'El contenido del mensaje no puede estar vacío']
-    },
-    mensajeLeido: {
-        type: Boolean,
-        default: false,
-        required: [true, 'El estado del mensaje es obligatorio']
     }
 }, {
     versionKey: false

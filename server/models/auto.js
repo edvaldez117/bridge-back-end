@@ -144,7 +144,6 @@ const autoSchema = new Schema({
 
 autoSchema.methods.toJSON = function() {
     let auto = this.toObject();
-    delete auto.usuario;
     if (auto.modelo) {
         delete auto.modelo.activo;
         if (auto.modelo.marca) {
