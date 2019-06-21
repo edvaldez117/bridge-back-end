@@ -65,6 +65,7 @@ app.put('/usuario', verificarToken, (req, res) => {
         usuario.direccion.numeroInterior = body.direccion.numeroInterior === null ? undefined : body.direccion.numeroInterior;
     }
     usuario.telefono = body.telefono || usuario.telefono;
+    usuario.tema = body.tema || usuario.tema;
     usuario.save((err, usuarioDB) => {
         if (err) {
             return res.status(500).json({
