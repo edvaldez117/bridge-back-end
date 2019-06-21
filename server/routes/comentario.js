@@ -39,6 +39,8 @@ app.post('/comentario', [verificarToken], (req, res) => {
                 err
             });
         }
+        comentarioDB.usuario = usuario;
+        comentarioDB.usuario.imagenPerfil = base64(comentarioDB.usuario.imagenPerfil, 'usuarios');
         res.json({
             ok: true,
             comentario: comentarioDB
