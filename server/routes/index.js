@@ -13,5 +13,6 @@ app.use(require('./reportes'));
 app.use(require('./wish-list'));
 app.use(require('./mensaje'));
 app.use(require('./cuenta'));
+app.use(require('./contacto'));
 
 module.exports = app;
