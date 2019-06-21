@@ -3,6 +3,7 @@ const SHA256 = require('crypto-js/sha256');
 const Usuario = require('../models/usuario');
 const Auto = require('../models/auto');
 const Tarjeta = require('../models/tarjeta');
+const ProveedorDeEnvio = require('../models/proveedor-de-envio');
 
 const verificarToken = (req, res, next) => {
     const token = req.get('Authorization');
@@ -150,11 +151,37 @@ const verificarTarjeta = (req, res, next) => {
     });
 }
 
+const verificarProveedor = (req, res, next) => {
+    if (req.body.proveedorDeEnvio) {
+        ProveedorDeEnvio.findById(req.body.proveedorDeEnvio, (err, proveedorDeEnvio) => {
+            if (err) {
+                return res.status(400).json({
+                    ok: false,
+                    err
+                });
+            }
+            if (!proveedorDeEnvio) {
+                return res.status(400).json({
+                    ok: false,
+                    err: {
+                        message: 'El proveedor especificado no existe'
+                    }
+                });
+            }
+            req.proveedorDeEnvio = proveedorDeEnvio;
+            next();
+        });
+    } else {
+        next();
+    }
+}
+
 module.exports = {
     verificarToken,
     verificarAuto,
     verificarImagen,
     verificarRol,
     verificarAutoDisponible,
-    verificarTarjeta
+    verificarTarjeta,
+    verificarProveedor
 }

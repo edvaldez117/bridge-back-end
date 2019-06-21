@@ -15,5 +15,6 @@ app.use(require('./mensaje'));
 app.use(require('./cuenta'));
 app.use(require('./contacto'));
 app.use(require('./comentario'));
+app.use(require('./proveedor-de-envio'));
 
 module.exports = app;

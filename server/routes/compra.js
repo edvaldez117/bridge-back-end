@@ -1,6 +1,7 @@
 const express = require('express');
-const { verificarToken, verificarAutoDisponible, verificarTarjeta } = require('../middlewares/middlewares');
+const { verificarToken, verificarAutoDisponible, verificarTarjeta, verificarProveedor } = require('../middlewares/middlewares');
 const Compra = require('../models/compra');
+const ProveedorDeEnvio = require('../models/proveedor-de-envio');
 const app = express();
 
 app.get('/compras', [verificarToken], (req, res) => {
@@ -43,13 +44,17 @@ app.get('/compra/:id', [verificarToken], (req, res) => {
     });
 });
 
-app.post('/compra', [verificarToken, verificarAutoDisponible, verificarTarjeta], (req, res) => {
-    let { body, usuario, auto } = req;
+app.post('/compra', [verificarToken, verificarAutoDisponible, verificarTarjeta, verificarProveedor], (req, res) => {
+    let { body, usuario, auto, proveedorDeEnvio } = req;
     body.usuario = usuario._id;
     body.subtotal = auto.precio;
     body.comision = auto.precio * 0.10;
     body.iva = (auto.precio + body.comision) * 0.16;
-    body.costoEnvio = 10000
+    if (proveedorDeEnvio) {
+        body.costoEnvio = proveedorDeEnvio.costo;
+    } else {
+        body.costoEnvio = 0
+    }
     body.total = body.subtotal + body.comision + body.iva + body.costoEnvio;
     body.fecha = undefined;
     let compra = new Compra(body);
