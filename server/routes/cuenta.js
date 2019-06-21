@@ -1,5 +1,6 @@
 const express = require('express');
 const { verificarToken } = require('../middlewares/middlewares');
+const { getImagenesAuto } = require('../tools/tools');
 const Auto = require('../models/auto');
 const app = express();
 
@@ -11,6 +12,9 @@ app.get('/cuenta/autos', [verificarToken], (req, res) => {
                 err
             });
         }
+        autos.forEach(auto => {
+            getImagenesAuto(auto);
+        });
         res.json({
             ok: true,
             autos
