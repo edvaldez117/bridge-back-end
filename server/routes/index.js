@@ -14,5 +14,6 @@ app.use(require('./wish-list'));
 app.use(require('./mensaje'));
 app.use(require('./cuenta'));
 app.use(require('./contacto'));
+app.use(require('./comentario'));
 
 module.exports = app;
