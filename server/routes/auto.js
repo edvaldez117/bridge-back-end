@@ -1,6 +1,6 @@
 const express = require('express');
 const { verificarToken, verificarAuto, verificarImagen } = require('../middlewares/middlewares');
-const { getImagenesAuto, borrarArchivo } = require('../tools/tools');
+const { getImagenesAuto, borrarArchivo, base64 } = require('../tools/tools');
 const Auto = require('../models/auto');
 
 const app = express();
@@ -22,6 +22,7 @@ app.get('/auto/:id', (req, res) => {
                 }
             });
         }
+        autoDB.usuario.imagenPerfil = base64(autoDB.usuario.imagenPerfil, 'usuarios');
         getImagenesAuto(autoDB);
         res.json({
             ok: true,
@@ -76,7 +77,7 @@ app.get('/autos', (req, res) => {
     });
 });
 
-app.post('/auto', verificarToken, (req, res) => {
+app.post('/auto', [verificarToken], (req, res) => {
     let { body } = req;
     body._id = undefined;
     body.usuario = req.usuario._id;

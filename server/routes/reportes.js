@@ -51,7 +51,8 @@ app.get('/reporte-marcas', [verificarToken, verificarRol], (req, res) => {
         res.json({
             ok: true,
             ventasPorMarca,
-            totalGanancias
+            totalGanancias,
+            totalAutos: Compra.count()
         });
     });
 });
@@ -95,7 +96,8 @@ app.get('/reporte-modelos', [verificarToken, verificarRol], (req, res) => {
         res.json({
             ok: true,
             ventasPorModelo,
-            totalGanancias
+            totalGanancias,
+            totalAutos: Compra.count()
         });
     });
 });

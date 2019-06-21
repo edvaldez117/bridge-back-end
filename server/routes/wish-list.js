@@ -1,7 +1,7 @@
 const express = require('express');
 const { verificarToken, verificarAutoDisponible } = require('../middlewares/middlewares');
+const { base64 } = require('../tools/tools');
 const WishList = require('../models/wish-list');
-const Usuario = require('../models/usuario');
 const app = express();
 
 app.get('/wish-list', [verificarToken], (req, res) => {
@@ -21,6 +21,9 @@ app.get('/wish-list', [verificarToken], (req, res) => {
         }
         wishListDB = wishListDB.filter(wishList => {
             return !wishList.auto.autoVendido
+        });
+        wishListDB.forEach(elemento => {
+            elemento.auto.usuario.imagenPerfil = base64(elemento.auto.usuario.imagenPerfil, 'usuarios');
         });
         res.json({
             ok: true,
