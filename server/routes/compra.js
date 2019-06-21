@@ -1,18 +1,31 @@
 const express = require('express');
 const { verificarToken, verificarAutoDisponible, verificarTarjeta, verificarProveedor } = require('../middlewares/middlewares');
+const { getImagenesAuto, base64 } = require('../tools/tools');
 const Compra = require('../models/compra');
 const ProveedorDeEnvio = require('../models/proveedor-de-envio');
 const app = express();
 
 app.get('/compras', [verificarToken], (req, res) => {
     const { usuario } = req;
-    Compra.find({ usuario: usuario._id }).populate('auto').exec((err, comprasDB) => {
+    Compra.find({ usuario: usuario._id }).populate({
+        path: 'auto',
+        populate: {
+            path: 'usuario',
+            model: 'Usuario'
+        }
+    }).exec((err, comprasDB) => {
         if (err) {
             return res.status(500).json({
                 ok: false,
                 err
             });
         }
+        comprasDB.forEach(compra => {
+            getImagenesAuto(compra.auto);
+            compra.auto.usuario.imagenPerfil = base64(compra.auto.usuario.imagenPerfil, 'usuarios');
+            compra.auto.usuario.activo = undefined;
+            compra.auto.usuario.contrasena = undefined;
+        });
         res.json({
             ok: true,
             compras: comprasDB
