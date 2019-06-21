@@ -1,17 +1,21 @@
 const express = require('express');
 const Comentario = require('../models/comentario');
 const { verificarToken } = require('../middlewares/middlewares');
+const { base64 } = require('../tools/tools');
 const app = express();
 
 app.get('/comentarios/:auto', (req, res) => {
     const { auto } = req.params;
-    Comentario.find({ auto }, (err, comentarios) => {
+    Comentario.find({ auto }).populate('usuario').exec((err, comentarios) => {
         if (err) {
             return res.status(400).json({
                 ok: false,
                 err
             });
         }
+        comentarios.forEach(comentario => {
+            comentario.usuario.imagenPerfil = base64(comentario.usuario.imagenPerfil, 'usuarios');
+        });
         res.json({
             ok: true,
             comentarios
