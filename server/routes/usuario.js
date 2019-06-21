@@ -24,6 +24,7 @@ app.post('/usuario', (req, res) => {
     body.activo = true;
     body.isAdmin = false;
     body.imagenPerfil = 'default.jpg'
+    body.tema = 'default-theme';
     if (body.nombreCompleto) {
         body.nombreCompleto.apellido2 = body.nombreCompleto.apellido2 === null ? undefined : body.nombreCompleto.apellido2;
     }
