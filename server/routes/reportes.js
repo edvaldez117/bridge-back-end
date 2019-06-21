@@ -45,14 +45,16 @@ app.get('/reporte-marcas', [verificarToken, verificarRol], (req, res) => {
             });
         }
         let totalGanancias = 0;
+        let totalAutos = 0;
         ventasPorMarca.forEach(marca => {
             totalGanancias += marca.gananciasPorComision;
+            totalAutos += marca.autosVendidos;
         });
         res.json({
             ok: true,
             ventasPorMarca,
             totalGanancias,
-            totalAutos: Compra.count()
+            totalAutos
         });
     });
 });
@@ -90,14 +92,16 @@ app.get('/reporte-modelos', [verificarToken, verificarRol], (req, res) => {
             });
         }
         let totalGanancias = 0;
+        let totalAutos = 0;
         ventasPorModelo.forEach(marca => {
             totalGanancias += marca.gananciasPorComision;
+            totalAutos += marca.autosVendidos;
         });
         res.json({
             ok: true,
             ventasPorModelo,
             totalGanancias,
-            totalAutos: Compra.count()
+            totalAutos
         });
     });
 });
