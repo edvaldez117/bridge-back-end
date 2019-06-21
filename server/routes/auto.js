@@ -7,7 +7,7 @@ const app = express();
 
 app.get('/auto/:id', (req, res) => {
     const { id } = req.params;
-    Auto.findOne({ _id: id, autoVendido: false }, (err, autoDB) => {
+    Auto.findOne({ _id: id, autoVendido: false }).populate('usuario').exec((err, autoDB) => {
         if (err) {
             return res.status(400).json({
                 ok: false,

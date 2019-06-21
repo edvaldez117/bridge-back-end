@@ -1,11 +1,18 @@
 const express = require('express');
 const { verificarToken, verificarAutoDisponible } = require('../middlewares/middlewares');
 const WishList = require('../models/wish-list');
+const Usuario = require('../models/usuario');
 const app = express();
 
 app.get('/wish-list', [verificarToken], (req, res) => {
     const { usuario } = req;
-    WishList.find({ usuario: usuario._id }).populate('auto').exec((err, wishListDB) => {
+    WishList.find({ usuario: usuario._id }).populate({
+        path: 'auto',
+        populate: {
+            path: 'usuario',
+            model: 'Usuario'
+        }
+    }).exec((err, wishListDB) => {
         if (err) {
             return res.status(500).json({
                 ok: false,
@@ -18,6 +25,28 @@ app.get('/wish-list', [verificarToken], (req, res) => {
         res.json({
             ok: true,
             wishList: wishListDB
+        });
+    });
+});
+
+app.get('/wish-list/:auto', [verificarToken], (req, res) => {
+    const { usuario } = req;
+    WishList.findOne({ usuario: usuario._id, auto: req.params.auto }, (err, wishListDB) => {
+        if (err) {
+            return res.status(400).json({
+                ok: false,
+                err
+            });
+        }
+        if (!wishListDB) {
+            return res.json({
+                ok: true,
+                existe: false
+            });
+        }
+        res.json({
+            ok: true,
+            existe: true
         });
     });
 });
