@@ -45,7 +45,7 @@ app.get('/autos', (req, res) => {
             condiciones.$and.push({ precio: { $lte: precio } });
         }
     }
-    Auto.find(condiciones, (err, autos) => {
+    Auto.find(condiciones).populate('usuario').exec((err, autos) => {
         if (err) {
             return res.status(400).json({
                 ok: false,
@@ -71,6 +71,8 @@ app.get('/autos', (req, res) => {
         }
         autos.forEach(auto => {
             getImagenesAuto(auto);
+            auto.usuario.contrasena = undefined;
+            auto.usuario.activo = undefined;
         });
         res.json({
             ok: true,
