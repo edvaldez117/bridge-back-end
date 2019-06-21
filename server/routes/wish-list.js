@@ -1,6 +1,6 @@
 const express = require('express');
 const { verificarToken, verificarAutoDisponible } = require('../middlewares/middlewares');
-const { base64 } = require('../tools/tools');
+const { base64, getImagenesAuto } = require('../tools/tools');
 const WishList = require('../models/wish-list');
 const app = express();
 
@@ -24,6 +24,7 @@ app.get('/wish-list', [verificarToken], (req, res) => {
         });
         wishListDB.forEach(elemento => {
             elemento.auto.usuario.imagenPerfil = base64(elemento.auto.usuario.imagenPerfil, 'usuarios');
+            getImagenesAuto(elemento.auto);
         });
         res.json({
             ok: true,
@@ -49,7 +50,8 @@ app.get('/wish-list/:auto', [verificarToken], (req, res) => {
         }
         res.json({
             ok: true,
-            existe: true
+            existe: true,
+            id: wishListDB._id
         });
     });
 });

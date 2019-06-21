@@ -22,6 +22,8 @@ app.get('/auto/:id', (req, res) => {
                 }
             });
         }
+        autoDB.usuario.contrasena = undefined;
+        autoDB.usuario.activo = undefined;
         autoDB.usuario.imagenPerfil = base64(autoDB.usuario.imagenPerfil, 'usuarios');
         getImagenesAuto(autoDB);
         res.json({
