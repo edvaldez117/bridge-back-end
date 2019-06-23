@@ -25,12 +25,6 @@ const marcaSchema = new Schema({
     versionKey: false
 });
 
-marcaSchema.methods.toJSON = function() {
-    let marca = this.toObject();
-    delete marca.activo;
-    return marca;
-}
-
 marcaSchema.plugin(uniqueValidator, { message: 'El {PATH} de la marca debe ser único' });
 
 module.exports = mongoose.model('Marca', marcaSchema, 'marca');

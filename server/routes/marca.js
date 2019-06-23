@@ -28,6 +28,7 @@ app.get('/marcas', (req, res) => {
 });
 
 app.post('/marca', [verificarToken, verificarRol], (req, res) => {
+    req.body._id = undefined;
     req.body.activo = true;
     for (const propiedad in req.body) {
         if (req.body[propiedad] === null) {
@@ -50,6 +51,7 @@ app.post('/marca', [verificarToken, verificarRol], (req, res) => {
 });
 
 app.put('/marca/:id', [verificarToken, verificarRol], (req, res) => {
+    req.body._id = undefined;
     req.body.activo = true;
     for (const propiedad in req.body) {
         if (req.body[propiedad] === null) {

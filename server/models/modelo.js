@@ -27,12 +27,6 @@ const modeloSchema = new Schema({
     versionKey: false
 });
 
-modeloSchema.methods.toJSON = function() {
-    let modelo = this.toObject();
-    delete modelo.activo;
-    return modelo;
-}
-
 modeloSchema.plugin(autopopulate);
 
 module.exports = mongoose.model('Modelo', modeloSchema, 'modelo');

@@ -30,6 +30,7 @@ app.get('/modelos/:marca', (req, res) => {
 
 app.post('/modelo', [verificarToken, verificarRol], (req, res) => {
     req.body.activo = true;
+    req.body._id = undefined;
     for (const propiedad in req.body) {
         if (req.body[propiedad] === null) {
             req.body[propiedad] = undefined;
@@ -51,6 +52,7 @@ app.post('/modelo', [verificarToken, verificarRol], (req, res) => {
 });
 
 app.put('/modelo/:id', [verificarToken, verificarRol], (req, res) => {
+    req.body._id = undefined;
     for (const propiedad in req.body) {
         if (req.body[propiedad] === null) {
             req.body[propiedad] = undefined;
