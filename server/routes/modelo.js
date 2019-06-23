@@ -94,7 +94,7 @@ app.delete('/modelo/:id', [verificarToken, verificarRol], (req, res) => {
                 err
             });
         }
-        if (!marcaDB) {
+        if (!modeloDB) {
             return res.status(400).json({
                 ok: false,
                 err: {
