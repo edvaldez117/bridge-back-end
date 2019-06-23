@@ -58,7 +58,7 @@ app.put('/modelo/:id', [verificarToken, verificarRol], (req, res) => {
             req.body[propiedad] = undefined;
         }
     }
-    Modelo.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true }, (err, modeloDB) => {
+    Modelo.findById(req.params.id, (err, modeloDB) => {
         if (err) {
             return res.status(400).json({
                 ok: false,
@@ -73,6 +73,12 @@ app.put('/modelo/:id', [verificarToken, verificarRol], (req, res) => {
                 }
             });
         }
+        for (const propiedad in modeloDB) {
+            if (req.body[propiedad]) {
+                modeloDB[propiedad] = req.body[propiedad];
+            }
+        }
+        modeloDB.save();
         res.json({
             ok: true,
             modelo: modeloDB

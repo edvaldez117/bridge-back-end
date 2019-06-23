@@ -58,7 +58,7 @@ app.put('/marca/:id', [verificarToken, verificarRol], (req, res) => {
             req.body[propiedad] = undefined;
         }
     }
-    Marca.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidator: true }, (err, marcaDB) => {
+    Marca.findById(req.params.id, (err, marcaDB) => {
         if (err) {
             return res.status(400).json({
                 ok: false,
@@ -73,6 +73,13 @@ app.put('/marca/:id', [verificarToken, verificarRol], (req, res) => {
                 }
             });
         }
+        for (const propiedad in marcaDB) {
+            if (req.body[propiedad]) {
+                marcaDB[propiedad] = req.body[propiedad];
+            }
+        }
+        marcaDB.paginaWeb = req.body.paginaWeb;
+        marcaDB.save();
         res.json({
             ok: true,
             marca: marcaDB
